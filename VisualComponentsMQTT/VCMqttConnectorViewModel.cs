@@ -64,7 +64,7 @@ namespace VisualComponentsMQTT
         private string[] _validRpcExtensionsToTopic = new string[] { "input/call", "input/cancel", "status/running", "status/done", "status/error" };
         private string[] _validRpcOutputExtensions = new string[] { "rpc_running_", "rpc_done_", "rpc_error_" };
 
-        public string Sequence { get; set; } //Sequence of Participant
+        public string Sequence { get; set; } = ""; //Sequence of Participant
 
         public List<BehaviorType> validSignals = new List<BehaviorType>();
         public BehaviorType[] validSignalsArray = new BehaviorType[] {
@@ -121,7 +121,7 @@ namespace VisualComponentsMQTT
         private void _sendSimUpdate(bool reseted)
         {
             string topicPrefix = "";
-            if (Sequence != "") { topicPrefix = Sequence + "/"; }
+            if (!string.IsNullOrWhiteSpace(Sequence)) { topicPrefix = Sequence + "/"; }
             else { }
         
             _publish(topicPrefix + "vc/status/initialState", reseted.ToString().ToLower());
@@ -131,7 +131,7 @@ namespace VisualComponentsMQTT
         private void _simulationSpeedChanged(object sender, SimulationSpeedFactorChangedEventArgs e)
         {
             string topicPrefix = "";
-            if (Sequence != "") { topicPrefix = Sequence + "/"; }
+            if (!string.IsNullOrWhiteSpace(Sequence)) { topicPrefix = Sequence + "/"; }
             else { }
 
             _publish(topicPrefix + "vc/status/speed", _application.Simulation.SpeedFactor.ToString());
@@ -260,7 +260,7 @@ namespace VisualComponentsMQTT
         private void _subscribe()
         {
             string topicPrefix = "";
-            if (Sequence != "") { topicPrefix = Sequence + "/"; }
+            if (!string.IsNullOrWhiteSpace(Sequence)) { topicPrefix = Sequence + "/"; }
             else { }
 
             // We will only go one, if our mqtt-client is connected.
@@ -366,7 +366,7 @@ namespace VisualComponentsMQTT
             // Extract the Topic
             string topic = e.Topic;
             string topicPrefix = "";
-            if (Sequence != "") { topicPrefix = Sequence + "/"; }
+            if (!string.IsNullOrWhiteSpace(Sequence)) { topicPrefix = Sequence + "/"; }
             else { }
 
             if (topicToSignal.ContainsKey(topic))
@@ -520,7 +520,7 @@ namespace VisualComponentsMQTT
         private string _getTopicForSignal(ISimNode node, ISignal signal, bool handleAsInput = false)
         {
             string topicPrefix = "";
-            if (Sequence != "") { topicPrefix = Sequence + "/"; }
+            if (!string.IsNullOrWhiteSpace(Sequence)) { topicPrefix = Sequence + "/"; }
             else { }
 
             if (_isRpcSignal(signal))
